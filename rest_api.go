@@ -16,7 +16,7 @@ type Message struct {
 }
 
 func main() {
-	log.Print("Welcome! Goland RestApi server started...")
+	log.Print("Welcome! Golang RestApi server started...")
 
 	r := mux.NewRouter()
 
@@ -36,6 +36,7 @@ func main() {
 }
 
 func apiPubsGetList(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-type", "Application/json")
 	pubs, error := helpers.GetPubsList()
 	if !error {
@@ -50,6 +51,7 @@ func apiPubsGetList(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiOrdersCreate(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-type", "Application/json")
 	order, error := helpers.CreateOrder()
 	if !error {
@@ -64,6 +66,7 @@ func apiOrdersCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiUsersGetById(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-type", "Application/json")
 	vars := mux.Vars(r)
 	userID, _ := strconv.ParseInt(vars["id"], 16, 32)
@@ -80,6 +83,7 @@ func apiUsersGetById(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiOrdersGet(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-type", "Application/json")
 	order, error := helpers.GetOrders()
 	if !error {
@@ -94,6 +98,7 @@ func apiOrdersGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiUsersGet(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-type", "Application/json")
 	users, error := helpers.GetUsers()
 	if !error {
@@ -108,6 +113,7 @@ func apiUsersGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func apiOrdersGetById(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Content-type", "Application/json")
 	vars := mux.Vars(r)
 	orderID, _ := strconv.ParseInt(vars["id"], 16, 32)
@@ -125,6 +131,7 @@ func apiOrdersGetById(w http.ResponseWriter, r *http.Request) {
 }
 
 func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewEncoder(w).Encode(Message{
 		Code:    404,
 		Message: "Oops..",
