@@ -16,6 +16,8 @@ type Message struct {
 }
 
 func main() {
+	log.Print("Welcome! Goland RestApi server started...")
+
 	r := mux.NewRouter()
 
 	r.HandleFunc("/users/get", apiUsersGet).Methods("POST")
@@ -28,6 +30,8 @@ func main() {
 	r.HandleFunc("/pubs/getlist", apiPubsGetList).Methods("POST")
 
 	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
+
+	log.Print("Server started on localhost:8000")
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
 

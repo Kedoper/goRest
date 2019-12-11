@@ -80,7 +80,7 @@ func GetUserById(id int64) ([]*User, bool) {
 		log.Print("Error to connect to database")
 		log.Print(err)
 	}
-	rows, err := db.Query("SELECT id,login,first_name,last_name,email,telephone,sex,vk_id FROM user WHERE id = ?", id)
+	rows, err := db.Query("SELECT id,login,first_name,last_name,email,telephone,sex,vk_id FROM users WHERE id = ?", id)
 	if err != nil {
 		log.Print("Error query")
 		log.Print(err)
