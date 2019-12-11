@@ -25,8 +25,24 @@ func main() {
 	r.HandleFunc("/orders/get/{id}", apiOrdersGetById).Methods("GET")
 	r.HandleFunc("/orders/create", apiOrdersCreate).Methods("GET")
 
+	r.HandleFunc("/pubs/getlist", apiPubsGetList).Methods("POST")
+
 	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
 	log.Fatal(http.ListenAndServe(":8000", r))
+}
+
+func apiPubsGetList(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "Application/json")
+	pubs, error := helpers.GetPubsList()
+	if !error {
+		json.NewEncoder(w).Encode(pubs)
+	} else {
+		message := Message{
+			Code:    500,
+			Message: "Problem whit database",
+		}
+		json.NewEncoder(w).Encode(message)
+	}
 }
 
 func apiOrdersCreate(w http.ResponseWriter, r *http.Request) {
