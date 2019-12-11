@@ -27,17 +27,26 @@ type User struct {
 	//RegisterDate int    `json:"register_date"`
 }
 
-func GetUsers() []*User {
+func GetUsers() ([]*User, bool) {
+	users := make([]*User, 0)
+
 	db, err := sql.Open("mysql", "root:123@tcp(localhost:3050)/panel")
 	if err != nil {
-		log.Fatal(err)
+		log.Print("Error to connect to database")
+		log.Print(err)
 	}
 	rows, err := db.Query("SELECT id,login,first_name,last_name,email,telephone,sex,vk_id FROM users")
 	if err != nil {
-		log.Fatal(err)
+		log.Print("Error query")
+		log.Print(err)
 	}
+
+	if err != nil {
+		return users, true
+	}
+
 	defer rows.Close()
-	users := make([]*User, 0)
+
 	for rows.Next() {
 		user := new(User)
 		err := rows.Scan(
@@ -49,23 +58,61 @@ func GetUsers() []*User {
 			&user.Telephone,
 			&user.Sex,
 			&user.VkID,
-			//&user.Password,
-			//&user.GoogleSecret,
-			//&user.VkToken,
-			//&user.Avatar,
-			//&user.Level,
-			//&user.Active,
-			//&user.LoginBanTo,
-			//&user.Bitmap,
-			//&user.RegisterDate,
 		)
 		if err != nil {
-			log.Fatal(err)
+			log.Print("Error scan row")
+			log.Print(err)
 		}
 		users = append(users, user)
 	}
 	if err = rows.Err(); err != nil {
-		log.Fatal(err)
+		log.Print("zx")
+		log.Print(err)
 	}
-	return users
+	return users, false
+}
+
+func GetUserById(id int64) ([]*User, bool) {
+	user := make([]*User, 0)
+
+	db, err := sql.Open("mysql", "root:123@tcp(localhost:3050)/panel")
+	if err != nil {
+		log.Print("Error to connect to database")
+		log.Print(err)
+	}
+	rows, err := db.Query("SELECT id,login,first_name,last_name,email,telephone,sex,vk_id FROM user WHERE id = ?", id)
+	if err != nil {
+		log.Print("Error query")
+		log.Print(err)
+	}
+
+	if err != nil {
+		return user, true
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		user_ := new(User)
+		err := rows.Scan(
+			&user_.ID,
+			&user_.Login,
+			&user_.FirstName,
+			&user_.LastName,
+			&user_.Email,
+			&user_.Telephone,
+			&user_.Sex,
+			&user_.VkID,
+		)
+		if err != nil {
+			log.Print("Error scan row")
+			log.Print(err)
+		}
+		user = append(user, user_)
+	}
+	if err = rows.Err(); err != nil {
+		log.Print("zx")
+		log.Print(err)
+	}
+	return user, false
 }
